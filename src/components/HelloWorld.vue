@@ -1,31 +1,20 @@
 <template>
   <div class="hello">
     <h1>{{ msg }}</h1>
-    <p>
-      For guide and recipes on how to configure / customize this project,<br>
-      check out the
-      <a href="https://cli.vuejs.org" target="_blank">vue-cli documentation</a>.
-    </p>
-    <h3>Installed CLI Plugins</h3>
-    <ul>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-babel" target="_blank">babel</a></li>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-eslint" target="_blank">eslint</a></li>
-    </ul>
-    <h3>Essential Links</h3>
-    <ul>
-      <li><a href="https://vuejs.org" target="_blank">Core Docs</a></li>
-      <li><a href="https://forum.vuejs.org" target="_blank">Forum</a></li>
-      <li><a href="https://chat.vuejs.org" target="_blank">Community Chat</a></li>
-      <li><a href="https://twitter.com/vuejs" target="_blank">Twitter</a></li>
-    </ul>
-    <h3>Ecosystem</h3>
-    <ul>
-      <li><a href="https://router.vuejs.org" target="_blank">vue-router</a></li>
-      <li><a href="https://vuex.vuejs.org" target="_blank">vuex</a></li>
-      <li><a href="https://github.com/vuejs/vue-devtools#vue-devtools" target="_blank">vue-devtools</a></li>
-      <li><a href="https://vue-loader.vuejs.org" target="_blank">vue-loader</a></li>
-      <li><a href="https://github.com/vuejs/awesome-vue" target="_blank">awesome-vue</a></li>
-    </ul>
+    <button class="refresh" @click="refresh">Refresh grid</button>
+    <button class="refresh" @click="redraw">Redraw</button>
+    <hr>
+
+    <div v-masonry transition-duration="0.3s" item-selector=".grid_item" column-width=".grid-sizer" class="grid">
+      <div class="grid-sizer"></div>
+      <div v-masonry-tile v-for="(item,index) in images"  :class="[grid_item, item.value ]">
+        <div class="fader">
+          <p class="content">Content</p>
+        </div>
+        <img :src="item.url" alt="grid item" class="grid_image" @load="redraw">
+      </div>
+    </div>
+
   </div>
 </template>
 
@@ -34,24 +23,141 @@ export default {
   name: 'HelloWorld',
   props: {
     msg: String
+  },
+  data: function () {
+      return {
+          images: [],
+          grid_item: 'grid_item'
+      }
+  },
+  methods: {
+      refresh: function () {
+          this.images = [];
+          for (let i = 0; i < 20; i++) {
+              this.images.push(this.getImageItem());
+          }
+      },
+      getRandom: function(num) {
+          return Math.floor(Math.random() * Math.floor(num)) + 1;
+      },
+      getImageItem: function(){
+          return {
+              url: `https://picsum.photos/${this.getRandom(3)}0${this.getRandom(53)}?random`, // Get random image each time
+              value: `grid_item_${this.getRandom(3)}` // Generate random value for each image
+          }
+      },
+      redraw: function () {
+          this.$redrawVueMasonry();
+      }
+  },
+  mounted: function(){
+      this.refresh();
   }
 }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
-h3 {
-  margin: 40px 0 0;
+* {
+  box-sizing: border-box;
 }
-ul {
-  list-style-type: none;
-  padding: 0;
+.refresh {
+  display: block;
+  background-color: #4286f4;
+  color: #fff;
+  font-size: 15px;
+  padding: 11px 15px 10px 15px;
+  border: none;
+  text-transform: uppercase;
+  font-weight: 600;
+  border-radius: 5px;
+  margin: 0 auto 30px auto;
+  transition: all 0.3s ease;
+  &:hover {
+    cursor: pointer;
+    background-color: darken(#4286f4, 10%);
+  }
 }
-li {
-  display: inline-block;
-  margin: 0 10px;
+
+.grid {
+
 }
-a {
-  color: #42b983;
+
+.grid-sizer {
+  width: 100%;
+}
+
+.grid_item {
+  width: 100%;
+  float: left;
+  position: relative;
+  &:hover .fader {
+    z-index: 1;
+    opacity: 1;
+  }
+}
+
+.grid_item_2 {
+  width: 25%;
+}
+
+.grid_item_3 {
+  width: 25%;
+}
+
+.fader {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background-color: rgba(0,0,0,0.5);
+  z-index: -1;
+  opacity: 0;
+  transition: all 0.5s ease;
+}
+
+.content {
+  margin: 47% 0 0 0;
+  color: #fff;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.grid_image {
+  display: block;
+  border-radius: 10px;
+  margin: 0;
+  padding: 2px;
+  width: 100%;
+  height: auto;
+}
+
+@media screen and (min-width: 768px) {
+  .grid_item, .grid-sizer {
+    width: 25%;
+  }
+  .grid_item_2 {
+    width: 50%;
+  }
+}
+
+@media screen and (min-width: 1200px) {
+  .grid_item, .grid-sizer {
+    width: 20%;
+  }
+  .grid_item_2 {
+    width: 40%;
+  }
+}
+
+@media screen and (min-width: 1850px) {
+  .grid_item, .grid-sizer {
+    width: 14.28571428571429%;
+  }
+  .grid_item_2 {
+    width: 28.57142857142858%;
+  }
 }
 </style>
