@@ -1,17 +1,17 @@
 <template>
   <div class="home">
-    <HelloWorld msg="Adaptive Grid"/>
+    <Grid msg="Adaptive Grid"/>
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
+import Grid from '@/components/Grid.vue'
 
 export default {
   name: 'home',
   components: {
-    HelloWorld
+    Grid
   }
 }
 </script>

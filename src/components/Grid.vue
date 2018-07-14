@@ -2,7 +2,6 @@
   <div class="hello">
     <h1>{{ msg }}</h1>
     <button class="refresh" @click="refresh">Refresh grid</button>
-    <button class="refresh" @click="redraw">Redraw</button>
     <hr>
 
     <div v-masonry transition-duration="0.3s" item-selector=".grid_item" column-width=".grid-sizer" class="grid">
@@ -19,39 +18,32 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex';
 export default {
   name: 'HelloWorld',
   props: {
     msg: String
   },
-  data: function () {
+  data() {
       return {
-          images: [],
           grid_item: 'grid_item'
       }
   },
+  computed: {
+      images() {
+          return this.$store.getters.getImages;
+      }
+  },
   methods: {
-      refresh: function () {
-          this.images = [];
-          for (let i = 0; i < 20; i++) {
-              this.images.push(this.getImageItem());
-          }
-      },
-      getRandom: function(num) {
-          return Math.floor(Math.random() * Math.floor(num)) + 1;
-      },
-      getImageItem: function(){
-          return {
-              url: `https://picsum.photos/${this.getRandom(3)}0${this.getRandom(53)}?random`, // Get random image each time
-              value: `grid_item_${this.getRandom(3)}` // Generate random value for each image
-          }
-      },
+      ...mapActions([
+          'refresh'
+      ]),
       redraw: function () {
-          this.$redrawVueMasonry();
+          this.$redrawVueMasonry(); // Align tiles to prevent overlapping
       }
   },
   mounted: function(){
-      this.refresh();
+     this.$store.dispatch('refresh');
   }
 }
 </script>
@@ -77,10 +69,6 @@ export default {
     cursor: pointer;
     background-color: darken(#4286f4, 10%);
   }
-}
-
-.grid {
-
 }
 
 .grid-sizer {
