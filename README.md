@@ -1,7 +1,8 @@
 # Random Grid
 **Current version** `0.1.0`
 Generating masonry grid with random images.
-Build with `VueJS` and [vue-masonry](https://www.npmjs.com/package/vue-masonry)
+Build with `VueJS`, [vue-masonry](https://www.npmjs.com/package/vue-masonry),
+[vue-packery-plugin](https://www.npmjs.com/package/vue-packery-plugin)
 
 ## Dependencies
 Node version `>8.9.x`

@@ -6,7 +6,7 @@
 
     <div v-masonry transition-duration="0.3s" item-selector=".grid_item" column-width=".grid-sizer" class="grid">
       <div class="grid-sizer"></div>
-      <div v-masonry-tile v-for="(item,index) in images"  :class="[grid_item, item.value ]">
+      <div v-masonry-tile v-for="item in images"  :class="[grid_item, item.value ]">
         <div class="fader">
           <p class="content">Content</p>
         </div>
@@ -20,7 +20,7 @@
 <script>
 import { mapActions } from 'vuex';
 export default {
-  name: 'HelloWorld',
+  name: 'Home',
   props: {
     msg: String
   },
@@ -49,7 +49,7 @@ export default {
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped lang="scss">
+<style lang="scss">
 * {
   box-sizing: border-box;
 }
